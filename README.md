@@ -25,35 +25,47 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Районы в виде кругов
+        // Данные о районах
         const districts = [
             {
                 name: "Микрорайон Наурыз",
-                coords: [53.18524923896369, 63.61788180663465],
-                radius: 200, // Радиус в метрах
+                coords: [
+                    [53.1900, 63.6100],
+                    [53.1950, 63.6250],
+                    [53.1800, 63.6300],
+                    [53.1750, 63.6150]
+                ],
                 color: "blue"
             },
             {
-                name: "ЖК Юбилейный",
-                coords: [53.24269168341029, 63.61414706611485],
-                radius: 200, // Радиус в метрах
+                name: "Район Алтын Арман",
+                coords: [
+                    [53.2450, 63.6050],
+                    [53.2500, 63.6200],
+                    [53.2350, 63.6150],
+                    [53.2300, 63.6000]
+                ],
                 color: "green"
             },
             {
                 name: "Центральный район",
-                coords: [53.214, 63.624],
-                radius: 800, // Радиус в метрах
+                coords: [
+                    [53.2200, 63.6200],
+                    [53.2250, 63.6300],
+                    [53.2100, 63.6350],
+                    [53.2050, 63.6250]
+                ],
                 color: "red"
             }
         ];
 
-        // Добавление кругов на карту
+        // Добавление полигонов для каждого района
         districts.forEach(district => {
-            L.circle(district.coords, {
+            L.polygon(district.coords, {
                 color: district.color,
-                fillColor: district.color,
-                fillOpacity: 0.4,
-                radius: district.radius
+                weight: 4, // Толщина линии
+                opacity: 0.8,
+                fillOpacity: 0.1 // Легкая заливка внутри
             }).addTo(map)
               .bindPopup(`<b>${district.name}</b>`);
         });
@@ -68,3 +80,4 @@
     </script>
 </body>
 </html>
+
