@@ -1,10 +1,10 @@
-Карта города Костанай, созданная Элиной Бухаршиной!
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта Костаная</title>
+    <title>Карта Костаная, созданная Элиной Бухаршиной!</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
     <style>
         #map {
             height: 100vh; /* Карта занимает весь экран */
@@ -16,6 +16,7 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
     <script>
         // Создание карты
         const map = L.map('map').setView([53.214, 63.624], 12); // Центр карты — Костанай
@@ -70,8 +71,28 @@
               .bindPopup(`<b>${district.name}</b>`);
         });
 
-        // Добавление обработки кликов на карту
+        // Инициализация маршрута с помощью Leaflet Routing Machine
+        const control = L.Routing.control({
+            waypoints: [
+                L.latLng(53.2068, 63.6173), // Точка начала (Центральный район)
+                L.latLng(53.2478, 63.6007) // Точка назначения (ЖК Юбилейный)
+            ],
+            routeWhileDragging: true, // Перетаскивание маркеров изменяет маршрут
+            show: true,
+            language: 'ru', // Русский язык
+            createMarker: (i, wp) => {
+                return L.marker(wp.latLng).bindPopup(i === 0 ? "Точка отправления" : "Точка назначения");
+            }
+        }).addTo(map);
+
+        // Добавление кликов на карту для динамического добавления точек маршрута
         map.on('click', function(e) {
+            const { lat, lng } = e.latlng;
+            control.spliceWaypoints(control.getWaypoints().length - 1, 0, L.latLng(lat, lng));
+        });
+
+        // Обработка кликов для добавления метки на карту
+        map.on('contextmenu', function(e) {
             const { lat, lng } = e.latlng;
             L.marker([lat, lng]).addTo(map)
                 .bindPopup(`Координаты: ${lat.toFixed(4)}, ${lng.toFixed(4)}`)
