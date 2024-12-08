@@ -1,9 +1,9 @@
- <p>Карта Костаная, созданная Элиной Бухаршиной!</p>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Карта Костаная, созданная Элиной Бухаршиной!</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
     <style>
         #map {
@@ -30,6 +30,7 @@
         <label>Точка B (лат, лон):</label>
         <input id="pointB" type="text" placeholder="Например, 53.247, 63.600">
         <button onclick="buildRoute()">Построить маршрут</button>
+        <button onclick="locateUser()">Моё местоположение</button>
     </div>
 
     <!-- Карта -->
@@ -121,6 +122,30 @@
                 map.setView(pointA, 13);
             } else {
                 alert('Введите корректные координаты в формате "Широта, Долгота"');
+            }
+        }
+
+        // Функция определения геопозиции пользователя
+        function locateUser() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { latitude, longitude } = position.coords;
+
+                    // Добавляем маркер на карту
+                    L.marker([latitude, longitude]).addTo(map)
+                        .bindPopup('Вы здесь!')
+                        .openPopup();
+
+                    // Центрируем карту на местоположении пользователя
+                    map.setView([latitude, longitude], 14);
+
+                    // Установка точки A как геопозиции пользователя
+                    document.getElementById('pointA').value = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                }, () => {
+                    alert('Не удалось определить ваше местоположение.');
+                });
+            } else {
+                alert('Геолокация не поддерживается вашим браузером.');
             }
         }
 
