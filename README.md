@@ -1,0 +1,1 @@
+# Map-of-Kostanay_1
