@@ -1,9 +1,9 @@
+ <title>Карта Костаная, созданная Элиной Бухаршиной!</title>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карта Костаная, созданная Элиной Бухаршиной!</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.css" />
     <style>
         #map {
@@ -45,6 +45,51 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
+
+        // Данные о районах
+        const districts = [
+            {
+                name: "Микрорайон Наурыз",
+                coords: [
+                    [53.18666664078427, 63.61593258998828],
+                    [53.1852836251683, 63.62126628816808],
+                    [53.183339738046364, 63.62001355803299],
+                    [53.18475826125334, 63.614600876596846]
+                ],
+                color: "blue"
+            },
+            {
+                name: "ЖК Юбилейный",
+                coords: [
+                    [53.24787450770954, 63.600710187902656],
+                    [53.24855834712629, 63.601735655610135],
+                    [53.244110480123396, 63.62270547663778],
+                    [53.23740987250295, 63.61708605648223]
+                ],
+                color: "green"
+            },
+            {
+                name: "Центральный район",
+                coords: [
+                    [53.20683178870234, 63.617304493459045],
+                    [53.20433112637876, 63.62228420836312],
+                    [53.21442500141282, 63.63661115207711],
+                    [53.217138566774594, 63.631210065676186]
+                ],
+                color: "red"
+            }
+        ];
+
+        // Добавление полигонов для каждого района
+        districts.forEach(district => {
+            L.polygon(district.coords, {
+                color: district.color,
+                weight: 4, // Толщина линии
+                opacity: 0.8,
+                fillOpacity: 0.1 // Легкая заливка внутри
+            }).addTo(map)
+              .bindPopup(`<b>${district.name}</b>`);
+        });
 
         // Инициализация маршрута
         let control = L.Routing.control({
