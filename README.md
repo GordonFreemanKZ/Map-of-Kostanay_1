@@ -1,4 +1,4 @@
-Карта города Костанай, созданная Элиной Бухашиной!
+Карта города Костанай, созданная Элиной Бухаршиной!
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,27 +18,47 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Создание карты
-        const map = L.map('map').setView([53.214, 63.624], 13); // Координаты Костаная
+        const map = L.map('map').setView([53.214, 63.624], 12); // Центр карты — Костанай
 
         // Добавление слоя карты OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Добавление метки на карте
-        const kostanayMarker = L.marker([53.214, 63.624]).addTo(map)
-            .bindPopup('Костанай, Казахстан')
-            .openPopup();
+        // Районы в виде кругов
+        const districts = [
+            {
+                name: "Микрорайон Наурыз",
+                coords: [53.1855, 63.6179],
+                radius: 1000, // Радиус в метрах
+                color: "blue"
+            },
+            {
+                name: "Район Алтын Арман",
+                coords: [53.2393, 63.6091],
+                radius: 1200, // Радиус в метрах
+                color: "green"
+            },
+            {
+                name: "Центральный район",
+                coords: [53.214, 63.624],
+                radius: 800, // Радиус в метрах
+                color: "red"
+            }
+        ];
 
-        // Добавление круговой области
-        const circle = L.circle([53.214, 63.624], {
-            color: 'blue',
-            fillColor: '#30a',
-            fillOpacity: 0.3,
-            radius: 1000 // Радиус в метрах
-        }).addTo(map);
+        // Добавление кругов на карту
+        districts.forEach(district => {
+            L.circle(district.coords, {
+                color: district.color,
+                fillColor: district.color,
+                fillOpacity: 0.4,
+                radius: district.radius
+            }).addTo(map)
+              .bindPopup(`<b>${district.name}</b>`);
+        });
 
-        // Обработка клика по карте
+        // Добавление обработки кликов на карту
         map.on('click', function(e) {
             const { lat, lng } = e.latlng;
             L.marker([lat, lng]).addTo(map)
