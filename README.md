@@ -56,8 +56,10 @@
         function toggleFreeDraw() {
             isDrawing = !isDrawing;
             if (isDrawing) {
+                map.dragging.disable(); // Отключить перемещение карты
                 alert('Свободное рисование включено. Зажмите левую кнопку мыши и рисуйте.');
             } else {
+                map.dragging.enable(); // Включить перемещение карты
                 alert('Свободное рисование выключено.');
             }
         }
